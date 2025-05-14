@@ -1,15 +1,17 @@
 'use client'
 import { supabase } from "@/supabaseClient";
 import { RefObject, useRef } from "react";
+import { useRouter } from "next/navigation";
 
 
 export default function Kirjaudu() {
 
     const kayttaja : RefObject<any> = useRef<HTMLElement | null>(null);
+    const router = useRouter();
 
     const kirjaudu = () : void => {
 
-        alert(kayttaja.current.value)
+        router.push(`/lainaus/${kayttaja.current.value}`)
         console.log(kayttaja.current.value)
     }
 
