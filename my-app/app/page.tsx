@@ -3,10 +3,6 @@ import { supabase } from "@/supabaseClient";
 
 export default async function Home(): Promise<React.ReactElement> {
 
-  const {data,error} = await supabase.from("members").select('*');
-
-
-
   return (
 
     <div className="hero bg-base-200 min-h-screen">
