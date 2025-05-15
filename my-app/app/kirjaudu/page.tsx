@@ -2,6 +2,7 @@
 import { supabase } from "@/supabaseClient";
 import { RefObject, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { useUser } from "@/context/UserContext";
 
 
 export default function Kirjaudu() {
@@ -9,10 +10,12 @@ export default function Kirjaudu() {
     const kayttaja : RefObject<any> = useRef<HTMLElement | null>(null);
     const router = useRouter();
 
-    const kirjaudu = () : void => {
+    const {login} = useUser();
 
-        router.push(`/lainaus/${kayttaja.current.value}`)
-        console.log(kayttaja.current.value)
+    const kirjaudu = async () => {
+
+        const kayttajaId = kayttaja.current.value;
+        await login(kayttajaId);
     }
 
   return (
@@ -26,7 +29,8 @@ export default function Kirjaudu() {
       </p>
 
         <input ref={kayttaja} type="text" className="input" placeholder="Kirjastokortin numero"></input>
-        <button className="btn btn-primary my-5" onClick={kirjaudu}>Kirjaudu sisään</button>
+        <button className="btn btn-primary my-5 mx-2" onClick={kirjaudu}>Kirjaudu sisään</button>
+        <a href="/" className="btn">Palaa etusivulle</a>
 
     </div>
   </div>
