@@ -12,7 +12,7 @@ export default async function Home(): Promise<React.ReactElement> {
       <p className="py-6">
         Tervetuloa kirjastoon. Kirjautumalla sisään pääset selaamaan ja lainaamaan teoksia.
       </p>
-      <a href="/kirjaudu" className="btn btn-primary">Kirjaudu sisään</a>
+      <a href="/lainaus" className="btn btn-primary">Lainaamaan</a>
     </div>
   </div>
 </div>

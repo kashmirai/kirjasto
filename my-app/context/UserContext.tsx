@@ -1,4 +1,5 @@
 'use client'
+
 import { supabase } from "@/supabaseClient";
 import { useRouter } from "next/navigation";
 import { createContext, useContext, useState } from "react";
@@ -48,7 +49,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
             });
             console.log("User data:", data);
         }
-        router.push(`/lainaus/${userId}`);
+        router.push(`/lainaus`);
     }
 
     const logout = async () => {
