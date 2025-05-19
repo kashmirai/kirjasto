@@ -8,7 +8,6 @@ export default function LainausLayout({
   children: React.ReactNode;
 }>) {
 
-  const {logout} = useUser();
 
   return (
     <>
@@ -26,7 +25,7 @@ export default function LainausLayout({
                 </summary>
                 <ul className="bg-base-100 rounded-t-none p-2">
                   <li><a>Omat tiedot</a></li>
-                  <button className="btn btn-ghost" onClick={logout}>Kirjaudu ulos</button>
+                  <button className="btn btn-ghost">Kirjaudu ulos</button>
                 </ul>
               </details>
             </li>

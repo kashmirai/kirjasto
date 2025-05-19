@@ -2,7 +2,7 @@
 import { RefObject, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/context/UserContext";
-import { createClient } from "@/utils/supabase/supabaseClient";
+import { supabase } from "@/utils/supabase/supabaseClient";
 
 
 
@@ -15,8 +15,7 @@ export default function Kirjaudu() {
     const kirjaudu = async (e: React.FormEvent) : Promise<void> => {
 
       e.preventDefault();
-
-      const supabase = await createClient()
+      
       const {data, error} = await supabase.auth.signInWithPassword({
         email: lomakeRef.current.tunnus.value,
         password: lomakeRef.current.salasana.value
@@ -29,8 +28,6 @@ export default function Kirjaudu() {
         console.error("Kirjautuminen epäonnistui", error);
       }
 
-      console.log(data);
-      console.log(error);
     }
 
   return (

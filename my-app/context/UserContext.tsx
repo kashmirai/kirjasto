@@ -1,6 +1,6 @@
 'use client'
 
-import { supabase } from "@/supabaseClient";
+
 import { useRouter } from "next/navigation";
 import { createContext, useContext, useState } from "react";
 
@@ -15,8 +15,6 @@ interface UserContextType {
     setUser: React.Dispatch<React.SetStateAction<User | null>>;
     error : string | null;
     setError: React.Dispatch<React.SetStateAction<string | null>>;
-    login: (userId: number) => Promise<void>;
-    logout: () => Promise<void>;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -28,37 +26,10 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
 
-    const login = async (userId : number) => {
-        const { data, error } = await supabase
-            .from("members")
-            .select("*")
-            .eq("member_id", userId)
-            .single();
 
-        if (error) {
-            console.error("Error fetching user data:", error);
-            setError("Käyttäjätunnusta ei löydy.");
-            return;
-        }
-
-        if (data) {
-            setUser({
-                id: data.id,
-                first_name: data.first_name,
-                last_name: data.last_name,
-            });
-            console.log("User data:", data);
-        }
-        router.push(`/lainaus`);
-    }
-
-    const logout = async () => {
-        setUser(null);
-        router.push("/");
-    }
 
     return (
-        <UserContext.Provider value={{user, setUser, error, setError, login, logout}}>
+        <UserContext.Provider value={{user, setUser, error, setError}}>
             {children}
         </UserContext.Provider>
     )

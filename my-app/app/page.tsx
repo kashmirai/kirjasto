@@ -1,4 +1,4 @@
-import { supabase } from "@/supabaseClient";
+
 
 
 export default async function Home(): Promise<React.ReactElement> {

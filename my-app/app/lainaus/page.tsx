@@ -1,6 +1,6 @@
 'use client'
 import { useUser } from "@/context/UserContext";
-import { supabase } from "@/supabaseClient";
+import { supabase } from "@/utils/supabase/supabaseClient";
 import { RefObject, useRef, useState } from "react";
 
 interface User {
@@ -74,10 +74,10 @@ export default function KayttajaPage() {
     }
 
 
-    {user && 
+
     <>
       <h1 className="text-3xl font-bold my-1">Lainaus</h1>
-      <p>Tervetuloa lainaamaan, {user?.first_name} {user?.last_name}!</p>
+      <p>Tervetuloa lainaamaan</p>
       <span className="flex flex-row items-center">
       <input ref={kirja} type="text" className="input my-4" placeholder="Kirjan ID"></input>
       <button className="btn" onClick={lisaa}>Lisää</button>
@@ -104,7 +104,7 @@ export default function KayttajaPage() {
       <a href="/" className="btn">Kirjaudu ulos</a>
     </>
 
-    }
+    
 
 
     </div>
