@@ -1,17 +1,17 @@
-'use client'
-import React from 'react';
-import { useUser } from "@/context/UserContext";
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import { UserProvider } from "@/context/UserContext";
 
-export default function LainausLayout({
+
+export default function MainLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
-
   return (
-    <>
-      <div className="navbar fixed top-0 left-0 w-full z-50 shadow-sm bg-base-200">
+
+    <main>
+                        <div className="navbar fixed top-0 left-0 w-full z-50 shadow-sm bg-base-200">
         <div className="flex-1">
           <a className="btn btn-ghost text-xl">Kirjasto</a>
         </div>
@@ -32,7 +32,8 @@ export default function LainausLayout({
           </ul>
         </div>
       </div>
-      <main>{children}</main>
-    </>
+        {children}
+    </main>
+
   );
 }
