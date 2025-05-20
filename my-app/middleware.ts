@@ -3,7 +3,7 @@ import { updateSession } from '@/utils/supabase/middleware';
 
 export const config = {
     matcher : [
-        '/((?!kirjaudu|_next|.well-known).*)'
+        '/((?!kirjaudu|rekisteroidy|_next|.well-known).*)'
     ]
 }
 

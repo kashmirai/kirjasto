@@ -45,7 +45,7 @@ export default function Kirjaudu() {
         <input name="tunnus" type="text" className="input" placeholder="Sähköpostiosoite"></input>
         <input name="salasana" type="password" className="input" placeholder="Salasana"></input>
         <button className="btn btn-primary my-5 mx-2" onClick={kirjaudu}>Kirjaudu sisään</button>
-        <a href="/" className="btn">Palaa etusivulle</a>
+        <a href="/rekisteroidy" className="btn mx-2" >Rekisteröidy</a>
         </form>
     </div>
   </div>

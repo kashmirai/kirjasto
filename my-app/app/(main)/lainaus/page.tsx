@@ -23,7 +23,7 @@ export default function KayttajaPage() {
     const kirja : RefObject<any> = useRef<HTMLElement | null>(null);
     const [lainat, setLainat] = useState<Laina [] | null>(null);
 
-    const {user, error} = useUser();
+    const {error, logout} = useUser();
 
     const lisaa = async () => {
 
@@ -101,7 +101,7 @@ export default function KayttajaPage() {
     )}
 
       <button className="btn btn-primary mx-2">Lainaa</button>
-      <a href="/" className="btn">Kirjaudu ulos</a>
+      <a href="/" className="btn" onClick={logout}>Kirjaudu ulos</a>
     </>
 
     
