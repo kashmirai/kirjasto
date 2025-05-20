@@ -54,6 +54,24 @@ export default function KayttajaPage() {
     const poistaLaina = async (lainaId: number) => {
       setLainat(prevLainat => prevLainat!.filter(laina => laina.book_id !== lainaId));
     }
+
+    const lainaa = async () => {
+
+      const lainattavatKirjat = lainat?.map(laina => ({
+        book_id :  laina.book_id,
+        member_id : kayttaja?.id,
+
+      }))
+      console.log(lainattavatKirjat);
+      console.log("kayttaja.id", kayttaja?.id)
+      const {data, error} = await supabase.from("transactions").insert(lainattavatKirjat);
+      if (error) {
+        console.error("Virhe lainatessa:", error);
+      } else {
+        console.log("Lainaus onnistui:", data);
+        setLainat([]);
+      }
+    }
     
 
   return (
@@ -96,7 +114,7 @@ export default function KayttajaPage() {
             </div>
     )}
 
-      <button className="btn btn-primary mx-2">Lainaa</button>
+      <button className="btn btn-primary mx-2" onClick={lainaa}>Lainaa</button>
       <a href="/" className="btn" onClick={logout}>Kirjaudu ulos</a>
     </>
 
