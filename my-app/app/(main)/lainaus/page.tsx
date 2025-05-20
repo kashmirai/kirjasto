@@ -19,7 +19,7 @@ export default function KayttajaPage() {
     const kirja : RefObject<any> = useRef<HTMLElement | null>(null);
     const [lainat, setLainat] = useState<Laina [] | null>(null);
 
-    const {error, kayttaja, logout} = useUser();
+    const {error, kayttaja, logout, kayttajaTiedot} = useUser();
 
     const lisaa = async () => {
 
@@ -73,7 +73,7 @@ export default function KayttajaPage() {
 
     <>
       <h1 className="text-3xl font-bold my-1">Lainaus</h1>
-      <p>Tervetuloa lainaamaan {kayttaja?.email}</p>
+      <p>Tervetuloa lainaamaan, {kayttajaTiedot?.first_name} {kayttajaTiedot?.last_name}!</p>
       <span className="flex flex-row items-center">
       <input ref={kirja} type="text" className="input my-4" placeholder="Kirjan ID"></input>
       <button className="btn" onClick={lisaa}>Lisää</button>

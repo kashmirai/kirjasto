@@ -5,7 +5,12 @@ import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 import { User } from "@supabase/supabase-js";
 
-
+interface Kayttajatiedot {
+    first_name : string;
+    last_name : string,
+    phone : string;
+    email : string;
+}
 
 interface UserContextType {
     kayttaja: User | null;
@@ -13,6 +18,7 @@ interface UserContextType {
     error : string | null;
     setError: React.Dispatch<React.SetStateAction<string | null>>;
     logout: () => Promise<void>;
+    kayttajaTiedot: Kayttajatiedot | null; 
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -21,6 +27,7 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export function UserProvider({ children }: { children: React.ReactNode }) {
 
     const [kayttaja, setKayttaja] = useState<User | null >(null);
+    const [kayttajaTiedot, setKayttajaTiedot] = useState<Kayttajatiedot | null>(null);
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
 
@@ -43,6 +50,16 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
 
         if (sessio?.user) {
         setKayttaja(sessio.user);
+        const { data: kayttajaData, error: kayttajaError } = await supabase
+            .from("members")
+            .select("*")
+            .eq("member_id", sessio.user.id)
+            .single();
+        
+        setKayttajaTiedot(kayttajaData);
+        console.log("Käyttäjätiedot:", kayttajaData);
+        console.log("Käyttäjä:", kayttajaTiedot);
+
         } else {
         setKayttaja(null);
         }
@@ -61,8 +78,10 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
 
     
 
+    
+
     return (
-        <UserContext.Provider value={{kayttaja, setKayttaja, error, setError, logout}}>
+        <UserContext.Provider value={{kayttaja, setKayttaja, error, setError, logout, kayttajaTiedot}}>
             {children}
         </UserContext.Provider>
     )
