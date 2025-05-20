@@ -30,26 +30,35 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     }
 
     useEffect(() => {
-        const haeKayttaja = async () => {
-            const {data : {user}, error} = await supabase.auth.getUser();
-            if (user) {
-                setKayttaja(user);
-                console.log("UserContext: ", user.email);
-            } else {
-                setKayttaja(null);
-            }
+    const haeKayttaja = async () => {
+        const { data, error } = await supabase.auth.getSession();
+
+        if (error) {
+        console.warn("Virhe sessiossa:", error.message);
+        setKayttaja(null);
+        return;
         }
 
-        haeKayttaja();
+        const sessio = data?.session;
 
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-            if (event === 'SIGNED_IN') {
-                setKayttaja(session?.user ?? null);
-            } else if (event === 'SIGNED_OUT') {
-                setKayttaja(null);
-            }
-        });
+        if (sessio?.user) {
+        setKayttaja(sessio.user);
+        } else {
+        setKayttaja(null);
+        }
+    };
+
+    haeKayttaja();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+        setKayttaja(session?.user ?? null);
+    });
+
+    return () => {
+        subscription.unsubscribe();
+    };
     }, []);
+
     
 
     return (

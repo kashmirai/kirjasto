@@ -1,8 +1,9 @@
 'use client'
-import { RefObject, useRef } from "react";
+import { FormEvent, RefObject, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/context/UserContext";
 import { supabase } from "@/utils/supabase/supabaseClient";
+import { registerUser } from "@/utils/auth";
 
 
 
@@ -12,29 +13,25 @@ export default function Kirjaudu() {
 
     const router = useRouter();
 
-    const rekisteroidy = async (e: React.FormEvent) : Promise<void> => {
-
+   const rekisteroidy = async (e: FormEvent) => {
     e.preventDefault();
-    
-    const {data, error} = await supabase.auth.signUp({
-    email: lomakeRef.current.tunnus.value,
-    password: lomakeRef.current.salasana.value,
-    options : {
-        data : {
-            first_name: lomakeRef.current.etunimi.value,
-            last_name: lomakeRef.current.sukunimi.value
-        }
-    }
-    });
+
+    const email = lomakeRef.current.tunnus.value;
+    const password = lomakeRef.current.salasana.value;
+    const first_name = lomakeRef.current.etunimi.value;
+    const last_name = lomakeRef.current.sukunimi.value;
+    const phone = lomakeRef.current.phone.value
+
+    const { data, error } = await registerUser({ email, password, first_name, last_name, phone });
 
     if (!error) {
-    router.push("/");
-    console.log("Rekisteröityminen onnistui");
+      console.log("Rekisteröityminen onnistui");
+      router.push("/"); // tai haluamasi reitti
     } else {
-    console.error("Rekisteröityminen epäonnistui", error);
+      console.error("Rekisteröityminen epäonnistui", error);
     }
+  };
 
-}
 
 
   return (
@@ -54,6 +51,7 @@ export default function Kirjaudu() {
         <input name="tunnus" type="text" className="input" placeholder="Sähköpostiosoite"></input>
         <input name="salasana" type="password" className="input" placeholder="Salasana"></input>
         <input name="salasana2" type="password" className="input" placeholder="Vahvista salasana"></input>
+        <input name="phone" type="text" className="input" placeholder="Puhelinnumero"></input>
         <a href="/rekisteroidy" className="btn btn-primary my-5 mx-2" onClick={rekisteroidy} >Luo tili</a>
         <a href="/kirjaudu" className="btn mx-2" >Etusivulle</a>
         </form>

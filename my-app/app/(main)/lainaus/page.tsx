@@ -3,11 +3,7 @@ import { useUser } from "@/context/UserContext";
 import { supabase } from "@/utils/supabase/supabaseClient";
 import { RefObject, useRef, useState } from "react";
 
-interface User {
-    first_name: string;
-    last_name: string;
-    member_id: number;
-}
+
 interface Laina {
     book_id: number;
     nimi : string;
@@ -23,7 +19,7 @@ export default function KayttajaPage() {
     const kirja : RefObject<any> = useRef<HTMLElement | null>(null);
     const [lainat, setLainat] = useState<Laina [] | null>(null);
 
-    const {error, logout} = useUser();
+    const {error, kayttaja, logout} = useUser();
 
     const lisaa = async () => {
 
@@ -77,7 +73,7 @@ export default function KayttajaPage() {
 
     <>
       <h1 className="text-3xl font-bold my-1">Lainaus</h1>
-      <p>Tervetuloa lainaamaan</p>
+      <p>Tervetuloa lainaamaan {kayttaja?.email}</p>
       <span className="flex flex-row items-center">
       <input ref={kirja} type="text" className="input my-4" placeholder="Kirjan ID"></input>
       <button className="btn" onClick={lisaa}>Lisää</button>
