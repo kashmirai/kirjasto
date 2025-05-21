@@ -37,7 +37,7 @@ export default function KayttajaPage() {
         }
 
         if (lainat?.some(laina => laina.book_id === kirjaId)) {
-          alert ("Olet jo lainannut tämän kirjan.");
+          alert ("Olet jo valinnut tämän kirjan.");
           return;
         }
 
@@ -60,6 +60,8 @@ export default function KayttajaPage() {
       const lainattavatKirjat = lainat?.map(laina => ({
         book_id :  laina.book_id,
         member_id : kayttaja?.id,
+        issue_date : new Date().toISOString(),
+        return_date : new Date(new Date().setDate(new Date().getDate() + 30)).toISOString()
 
       }))
       console.log(lainattavatKirjat);

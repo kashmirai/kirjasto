@@ -76,10 +76,8 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     };
     }, []);
 
-    
 
     
-
     return (
         <UserContext.Provider value={{kayttaja, setKayttaja, error, setError, logout, kayttajaTiedot}}>
             {children}
