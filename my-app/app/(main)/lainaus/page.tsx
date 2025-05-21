@@ -61,7 +61,7 @@ export default function KayttajaPage() {
         book_id :  laina.book_id,
         member_id : kayttaja?.id,
         issue_date : new Date().toISOString(),
-        return_date : new Date(new Date().setDate(new Date().getDate() + 30)).toISOString()
+        due_date : new Date(new Date().setDate(new Date().getDate() + 30)).toISOString()
 
       }))
       console.log(lainattavatKirjat);

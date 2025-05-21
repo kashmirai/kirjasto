@@ -6,11 +6,13 @@ import { RefObject, useEffect, useRef, useState } from "react";
 
 interface Laina {
     book_id: number;
+    transaction_id : number;
     nimi : string;
     kirjoittaja : string;
     julkaisuvuosi : number;
     tyyppi : string;
     kuva : string;
+    erapaiva : string;
 }
 
 
@@ -20,6 +22,17 @@ export default function ProfiiliPage() {
     const [lainat, setLainat] = useState<Laina [] | null>(null);
 
     const {error, kayttaja, logout, kayttajaTiedot} = useUser();
+
+    const palauta = async (transaction_id : any) => {
+        console.log("Palautetaan kirja id:llä", transaction_id);
+        const {data,error} = await supabase.from("transactions").delete().eq("transaction_id", transaction_id);
+        if (error) {
+            console.error("Virhe palautettaessa kirjaa:", error.message);
+        } else {
+            console.log("Kirja palautettu onnistuneesti", data);
+            setLainat(prevLainat => prevLainat ? prevLainat.filter(laina => laina.transaction_id !== transaction_id) : null);
+        }
+    }
 
     useEffect(() => {
     const haeLainaukset = async () => {
@@ -33,14 +46,19 @@ export default function ProfiiliPage() {
     if (error) {
       console.error("Virhe lainauksia haettaessa:", error.message);
     } else {
-      // Oletetaan, että data on [{ books: { title: string, ... }, ... }]
       const mappedLainat = data.map((laina: any) => ({
         book_id: laina.book_id,
+        transaction_id : laina.transaction_id,
         nimi: laina.books?.title,
         kirjoittaja: laina.books?.authors,
         julkaisuvuosi: laina.books?.published_year,
         tyyppi: laina.books?.categories,
         kuva: laina.books?.thumbnail,
+        erapaiva : new Date(laina.due_date).toLocaleDateString("fi-FI", {
+            day: "2-digit",
+            month: "2-digit",   
+            year: "numeric",
+        })
       }));
       setLainat(mappedLainat);
       console.log("Lainaukset:", mappedLainat);
@@ -63,12 +81,31 @@ export default function ProfiiliPage() {
       <p>Oma sivu, {kayttajaTiedot?.first_name} {kayttajaTiedot?.last_name}</p>
       <span>
 
-        {lainat?.map((laina, index) => (
-          <div key={index}>
-            <p><strong>{laina.nimi}</strong></p>
+        <ul className="list bg-base-100 rounded-box shadow-md w-full">
+  
+  <li className="p-4 pb-2 text-xs opacity-60 tracking-wide">Omat lainat</li>
 
-          </div>
+  
+        {lainat?.map((laina, index) => (
+    <li key = {index} className="list-row">
+    <div><img className="w-12" src={laina.kuva} /></div>
+    <div>
+      <div>{laina.nimi}</div>
+      <div className="text-xs font-semibold opacity-60">Eräpäivä {laina.erapaiva} </div>
+    </div>
+    <button className="btn btn-ghost">
+     Uusi laina
+    </button>
+    <button className="btn btn-ghost" onClick={() => {palauta(laina.transaction_id)}}>
+      Palauta
+    </button>
+  </li>
         ))}
+  
+
+  
+</ul>
+
      
       </span>
 
