@@ -21,7 +21,30 @@ export default function ProfiiliPage() {
     const kirja : RefObject<any> = useRef<HTMLElement | null>(null);
     const [lainat, setLainat] = useState<Laina [] | null>(null);
 
-    const {error, kayttaja, logout, kayttajaTiedot} = useUser();
+    const {error, kayttaja,  kayttajaTiedot} = useUser();
+
+    const uusiLaina = async (transaction_id : any) => {
+      console.log("Uusi laina id:llä", transaction_id);
+
+      const {data : hakuData, error : hakuError} = await supabase.from("transactions").select("due_date").eq("transaction_id", transaction_id).single();
+      if (hakuError) {
+        console.error("Virhe hakiessa due datea:", hakuError.message);
+        return;
+      } 
+      if (hakuData) {
+        console.log("Due date:", hakuData.due_date);
+      }
+
+        const dueDate = new Date(hakuData.due_date);
+        dueDate.setDate(dueDate.getDate() + 30);
+        const uusiDueDate = dueDate.toISOString(); 
+
+      const {data, error} = await supabase.from("transactions").update({
+        due_date: uusiDueDate
+      }).eq("transaction_id", transaction_id);
+      haeLainaukset();
+      
+    }
 
     const palauta = async (transaction_id : any) => {
         console.log("Palautetaan kirja id:llä", transaction_id);
@@ -34,7 +57,6 @@ export default function ProfiiliPage() {
         }
     }
 
-    useEffect(() => {
     const haeLainaukset = async () => {
     if (!kayttaja?.id) return;
 
@@ -65,8 +87,10 @@ export default function ProfiiliPage() {
     }
   };
 
-  haeLainaukset();
-}, [kayttaja]);
+    useEffect(() => {
+    
+     haeLainaukset();
+    }, [kayttaja]);
 
 
   return (
@@ -93,7 +117,7 @@ export default function ProfiiliPage() {
       <div>{laina.nimi}</div>
       <div className="text-xs font-semibold opacity-60">Eräpäivä {laina.erapaiva} </div>
     </div>
-    <button className="btn btn-ghost">
+    <button className="btn btn-ghost" onClick={() => {uusiLaina(laina.transaction_id)}}>
      Uusi laina
     </button>
     <button className="btn btn-ghost" onClick={() => {palauta(laina.transaction_id)}}>

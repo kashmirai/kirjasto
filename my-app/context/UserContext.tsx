@@ -17,7 +17,6 @@ interface UserContextType {
     setKayttaja: React.Dispatch<React.SetStateAction<User | null>>;
     error : string | null;
     setError: React.Dispatch<React.SetStateAction<string | null>>;
-    logout: () => Promise<void>;
     kayttajaTiedot: Kayttajatiedot | null; 
 }
 
@@ -30,11 +29,6 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     const [kayttajaTiedot, setKayttajaTiedot] = useState<Kayttajatiedot | null>(null);
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
-
-    const logout = async () => {
-        await supabase.auth.signOut(); 
-        window.location.href = "/kirjaudu"
-    }
 
     useEffect(() => {
     const haeKayttaja = async () => {
@@ -79,7 +73,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
 
     
     return (
-        <UserContext.Provider value={{kayttaja, setKayttaja, error, setError, logout, kayttajaTiedot}}>
+        <UserContext.Provider value={{kayttaja, setKayttaja, error, setError, kayttajaTiedot}}>
             {children}
         </UserContext.Provider>
     )

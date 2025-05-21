@@ -1,6 +1,8 @@
 'use client'
 import { useUser } from "@/context/UserContext";
+import { logoutUser } from "@/utils/auth";
 import { supabase } from "@/utils/supabase/supabaseClient";
+import { useRouter } from "next/navigation";
 import { RefObject, useRef, useState } from "react";
 
 
@@ -18,8 +20,18 @@ export default function KayttajaPage() {
 
     const kirja : RefObject<any> = useRef<HTMLElement | null>(null);
     const [lainat, setLainat] = useState<Laina [] | null>(null);
+    const router = useRouter();
 
-    const {error, kayttaja, logout, kayttajaTiedot} = useUser();
+    const {error, kayttaja, kayttajaTiedot} = useUser();
+
+    const handleLogout = async () => {
+      const { error } = await logoutUser();
+      if (!error) {
+        window.location.href = "/kirjaudu"
+      } else {
+        console.error("Virhe uloskirjautumisessa:", error);
+      }
+    }
 
     const lisaa = async () => {
 
@@ -117,7 +129,7 @@ export default function KayttajaPage() {
     )}
 
       <button className="btn btn-primary mx-2" onClick={lainaa}>Lainaa</button>
-      <a href="/" className="btn" onClick={logout}>Kirjaudu ulos</a>
+      <a href="/" className="btn" onClick={handleLogout}>Kirjaudu ulos</a>
     </>
 
     

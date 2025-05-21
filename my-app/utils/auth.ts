@@ -8,6 +8,8 @@ interface RegisterData {
   phone : string;
 }
 
+
+
 export async function registerUser({ email, password, first_name, last_name, phone }: RegisterData) {
   // 1. Luo käyttäjä Supabase authiin
   const { data, error } = await supabase.auth.signUp({

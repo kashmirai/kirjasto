@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { UserProvider, useUser } from "@/context/UserContext";
 import { supabase } from "@/utils/supabase/supabaseClient";
 import Link from "next/link";
+import { logoutUser } from "@/utils/auth";
 
 
 export default function MainLayout({
@@ -12,7 +13,14 @@ export default function MainLayout({
   children: React.ReactNode;
 }>) {
 
-    const {kayttaja, logout} = useUser();
+    const {kayttaja} = useUser();
+    const handleLogout = async () => {
+      const { error } = await logoutUser(); 
+      if (!error) {
+        window.location.href = "/kirjaudu"
+      } else {
+        console.error("Virhe uloskirjautumisessa:", error);
+      }}
 
   return (
 
@@ -32,7 +40,7 @@ export default function MainLayout({
                 <ul className="bg-base-100 rounded-t-none p-2">
                   <Link href="/profiili">Profiili</Link>
                   <li><a>Kirjautunut: {kayttaja?.email}</a></li>
-                  <button className="btn btn-ghost" onClick={logout}>Kirjaudu ulos</button>
+                  <button className="btn btn-ghost" onClick={handleLogout}>Kirjaudu ulos</button>
                 </ul>
               </details>
             </li>
