@@ -27,7 +27,7 @@ export default function MainLayout({
     <main>
         <div className="navbar fixed top-0 left-0 w-full z-50 shadow-sm bg-base-200">
         <div className="flex-1">
-          <a className="btn btn-ghost text-xl">Kirjasto</a>
+          <Link href = "/">Kirjasto</Link>
         </div>
         <div className="flex-none">
           <ul className="menu menu-horizontal px-7">

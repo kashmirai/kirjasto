@@ -1,7 +1,6 @@
 'use client'
 
 import { supabase } from "@/utils/supabase/supabaseClient";
-import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 import { User } from "@supabase/supabase-js";
 
@@ -28,7 +27,6 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     const [kayttaja, setKayttaja] = useState<User | null >(null);
     const [kayttajaTiedot, setKayttajaTiedot] = useState<Kayttajatiedot | null>(null);
     const [error, setError] = useState<string | null>(null);
-    const router = useRouter();
 
     useEffect(() => {
     const haeKayttaja = async () => {
@@ -51,8 +49,6 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
             .single();
         
         setKayttajaTiedot(kayttajaData);
-        console.log("Käyttäjätiedot:", kayttajaData);
-        console.log("Käyttäjä:", kayttajaTiedot);
 
         } else {
         setKayttaja(null);

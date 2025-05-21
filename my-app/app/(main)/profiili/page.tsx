@@ -24,16 +24,12 @@ export default function ProfiiliPage() {
     const {error, kayttaja,  kayttajaTiedot} = useUser();
 
     const uusiLaina = async (transaction_id : any) => {
-      console.log("Uusi laina id:llä", transaction_id);
 
       const {data : hakuData, error : hakuError} = await supabase.from("transactions").select("due_date").eq("transaction_id", transaction_id).single();
       if (hakuError) {
         console.error("Virhe hakiessa due datea:", hakuError.message);
         return;
       } 
-      if (hakuData) {
-        console.log("Due date:", hakuData.due_date);
-      }
 
         const dueDate = new Date(hakuData.due_date);
         dueDate.setDate(dueDate.getDate() + 30);
@@ -52,7 +48,6 @@ export default function ProfiiliPage() {
         if (error) {
             console.error("Virhe palautettaessa kirjaa:", error.message);
         } else {
-            console.log("Kirja palautettu onnistuneesti", data);
             setLainat(prevLainat => prevLainat ? prevLainat.filter(laina => laina.transaction_id !== transaction_id) : null);
         }
     }
@@ -63,7 +58,7 @@ export default function ProfiiliPage() {
     const { data, error } = await supabase
       .from("transactions")
       .select("*, books(*)")
-      .eq("member_id", kayttaja.id);
+      .eq("member_id", kayttaja.id).order("due_date", { ascending: true });
 
     if (error) {
       console.error("Virhe lainauksia haettaessa:", error.message);
@@ -83,7 +78,6 @@ export default function ProfiiliPage() {
         })
       }));
       setLainat(mappedLainat);
-      console.log("Lainaukset:", mappedLainat);
     }
   };
 

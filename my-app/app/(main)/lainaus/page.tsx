@@ -71,6 +71,7 @@ export default function KayttajaPage() {
 
       const lainattavatKirjat = lainat?.map(laina => ({
         book_id :  laina.book_id,
+        title : laina.nimi,
         member_id : kayttaja?.id,
         issue_date : new Date().toISOString(),
         due_date : new Date(new Date().setDate(new Date().getDate() + 30)).toISOString()
