@@ -44,12 +44,19 @@ export async function registerUser({ email, password, first_name, last_name, pho
 }
 
 export async function loginUser(email: string, password: string) {
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
 
-  return { data, error };
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    return { data, error };
+
+  } catch (error) {
+    return {data : null, error : error}
+  }
+
 }
 
 export async function logoutUser() {

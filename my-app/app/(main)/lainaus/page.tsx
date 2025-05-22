@@ -75,10 +75,13 @@ export default function KayttajaPage() {
         member_id : kayttaja?.id,
         issue_date : new Date().toISOString(),
         due_date : new Date(new Date().setDate(new Date().getDate() + 30)).toISOString()
-
       }))
-      console.log(lainattavatKirjat);
-      console.log("kayttaja.id", kayttaja?.id)
+
+      if (!lainattavatKirjat || lainattavatKirjat.length === 0) {
+        alert("Ei lainattavia kirjoja. Lisää vähintään yksi kirja.");
+        return;
+      }
+
       const {data, error} = await supabase.from("transactions").insert(lainattavatKirjat);
       if (error) {
         console.error("Virhe lainatessa:", error);

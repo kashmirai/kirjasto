@@ -26,7 +26,7 @@ export default function Kirjaudu() {
 
     if (!error) {
       console.log("Rekisteröityminen onnistui");
-      router.push("/"); // tai haluamasi reitti
+      router.push("/"); 
     } else {
       console.error("Rekisteröityminen epäonnistui", error);
     }

@@ -28,8 +28,8 @@ export default function SelaaPage() {
     <div className="hero bg-base-200 min-h-screen">
     <div className="hero-content text-center">
     <div className="max-w-full">
-    <h1>Hahaa</h1>
-    <div className = "grid grid-cols-4 gap-4 pt-10">
+
+    <div className = "grid grid-cols-4 gap-4 pt-15">
     {kirjat.map((kirja, index) => (
 
         <div className="card bg-base-100 w-48 shadow-sm" key={index}>
