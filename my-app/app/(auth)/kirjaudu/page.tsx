@@ -35,6 +35,7 @@ export default function Kirjaudu() {
       <p className="py-6">
         Tervetuloa kirjastoon. Kirjautumalla sisään pääset selaamaan ja lainaamaan teoksia.
       </p>
+      <p className="text-xs">Testikäyttäjä : uusi@testi.fi, testi123</p>
 
         <form className="flex flex-col items-center border-2 border-base-300 rounded-lg p-5" onSubmit={handleLogin}> 
         <input name="tunnus" type="text" className="input" placeholder="Sähköpostiosoite" onChange={(e) => setTunnus(e.target.value)} required></input>

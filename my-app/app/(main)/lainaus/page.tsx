@@ -3,7 +3,7 @@ import { useUser } from "@/context/UserContext";
 import { logoutUser } from "@/utils/auth";
 import { supabase } from "@/utils/supabase/supabaseClient";
 import { useRouter } from "next/navigation";
-import { RefObject, useRef, useState } from "react";
+import { RefObject, useEffect, useRef, useState } from "react";
 
 
 interface Laina {
@@ -20,22 +20,14 @@ export default function KayttajaPage() {
 
     const kirja : RefObject<any> = useRef<HTMLElement | null>(null);
     const [lainat, setLainat] = useState<Laina [] | null>(null);
-    const router = useRouter();
 
-    const {error, kayttaja, kayttajaTiedot} = useUser();
-
-    const handleLogout = async () => {
-      const { error } = await logoutUser();
-      if (!error) {
-        window.location.href = "/kirjaudu"
-      } else {
-        console.error("Virhe uloskirjautumisessa:", error);
-      }
-    }
+    const {kayttaja, kayttajaTiedot} = useUser();
 
     const lisaa = async () => {
 
         const kirjaId = kirja.current.value;
+
+        const {data : lainaData, error : lainaError} = await supabase.from("transactions").select('*').eq('book_id', kirjaId).eq('member_id', kayttaja?.id).maybeSingle();
 
         const {data, error} = await supabase.from("books").select('*').eq('book_id', kirjaId).maybeSingle();
 
@@ -48,19 +40,29 @@ export default function KayttajaPage() {
             kuva : data?.thumbnail
         }
 
+        if (lainaData) {
+          alert("Olet jo lainannut tämän kirjan.");
+          kirja.current.value = "";
+          return;
+        }
+
         if (lainat?.some(laina => laina.book_id === kirjaId)) {
           alert ("Olet jo valinnut tämän kirjan.");
+          kirja.current.value = "";
           return;
         }
 
         if (!error) {
             setLainat([...(lainat ?? []), uusiLaina]);
+            kirja.current.value = "";
         }
 
         if (!kirjaId) {
             alert("Anna kirjan ID.");
             return;
         }
+
+
     }
 
     const poistaLaina = async (lainaId: number) => {
@@ -98,15 +100,6 @@ export default function KayttajaPage() {
     <div className="hero-content text-center">
     <div className="max-w-lg">
 
-    {error &&
-    <>
-    <p className="text-red-500">{error}</p>
-    <a href="/" className="btn btn-primary">Palaa etusivulle</a>
-    </>
-    }
-
-
-
     <>
       <h1 className="text-3xl font-bold my-1">Lainaus</h1>
       <p>Tervetuloa lainaamaan, {kayttajaTiedot?.first_name} {kayttajaTiedot?.last_name}!</p>
@@ -133,7 +126,7 @@ export default function KayttajaPage() {
     )}
 
       <button className="btn btn-primary mx-2" onClick={lainaa}>Lainaa</button>
-      <a href="/" className="btn" onClick={handleLogout}>Kirjaudu ulos</a>
+      <a href="/" className="btn">Etusivulle</a>
     </>
 
     
